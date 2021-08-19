@@ -1,12 +1,28 @@
+const User = require('../models/User');
+
 const resolvers = {
   Query: {
     getCourses: () => "Hello"
   },
   Mutation: {
-    newUser: (_, input) => {
-      console.log(input);
+    newUser: async (_, { input }) => {
+      const { email, password } = input;
 
-      return "Creating..."
+      const userExists = await User.findOne({ email });
+      
+      if (userExists) {
+        throw new Error('Whoops: User already registered')
+      }
+
+      try {
+        const user = new User(input);
+        
+        user.save();
+
+        return user;
+      }catch (err) {
+        console.log(err);
+      }
     }
   }
 }
