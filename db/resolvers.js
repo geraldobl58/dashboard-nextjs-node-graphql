@@ -27,6 +27,18 @@ const resolvers = {
       }catch (err) {
         console.log(err);
       }
+    },
+
+    authenticateUser: async (_, { input }) => {
+      const { email, password } = input;
+
+      const userExists = await User.findOne({ email });
+
+      if (!userExists) {
+        throw new Error('Whoops: User does not exist')
+      }
+
+
     }
   }
 }
