@@ -1,45 +1,9 @@
-const { ApolloServer, gql } = require('apollo-server');
+const { ApolloServer } = require('apollo-server');
+const typeDefs = require('./db/schema');
+const resolvers = require('./db/resolvers');
 
-const typeDefs = gql`
-  type Course {
-    title: String
-  }
 
-  type Tecnology {
-    tecnology: String
-  }
 
-  type Query {
-    getCourses: [Course]
-    getTecnology: [Tecnology]
-  }
-`
-
-const courses = [
-  {
-    title: "Javascript Moderno",
-    tecnology: "ES6",
-  },
-  {
-    title: "Reactjs",
-    tecnology: "Library Javascript",
-  },
-  {
-    title: "Nodejs",
-    tecnology: "Librabry Backend",
-  },
-  {
-    title: "Nextjs",
-    tecnology: "Librabry for websites and seo",
-  }
-]
-
-const resolvers = {
-  Query: {
-    getCourses: () => courses,
-    getTecnology: () => courses
-  }
-}
 
 const server = new ApolloServer({
   typeDefs,
