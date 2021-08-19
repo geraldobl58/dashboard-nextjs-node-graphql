@@ -61,6 +61,17 @@ const resolvers = {
       return {
         token: createToken(userExists, process.env.SECRET, '24h')
       }
+    },
+    newProduct: async (_, { input }) => {
+      try {
+        const product = new Product(input);
+
+        const result = await product.save();
+
+        return result;
+      }catch(err) {
+        console.log(err);
+      }
     }
   }
 }
