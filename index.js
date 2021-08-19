@@ -3,11 +3,15 @@ const { ApolloServer, gql } = require('apollo-server');
 const typeDefs = gql`
   type Course {
     title: String
+  }
+
+  type Tecnology {
     tecnology: String
   }
 
   type Query {
     getCourses: [Course]
+    getTecnology: [Tecnology]
   }
 `
 
@@ -32,7 +36,8 @@ const courses = [
 
 const resolvers = {
   Query: {
-    getCourses: () => courses
+    getCourses: () => courses,
+    getTecnology: () => courses
   }
 }
 
