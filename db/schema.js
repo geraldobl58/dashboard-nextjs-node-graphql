@@ -9,8 +9,12 @@ const typeDefs = gql`
     tecnology: String
   }
 
+  input CourseInput {
+    tecnology: String
+  }
+
   type Query {
-    getCourses: [Course]
+    getCourses(input: CourseInput!): [Course]
     getTecnology: [Tecnology]
   }
 `

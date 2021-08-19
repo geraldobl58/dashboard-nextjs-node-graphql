@@ -19,8 +19,11 @@ const courses = [
 
 const resolvers = {
   Query: {
-    getCourses: () => courses,
-    getTecnology: () => courses
+    getCourses: (_, { input, ctx }) => {
+      const result = courses.filter(course => course.tecnology === input.tecnology);
+
+      return result;
+    }
   }
 }
 
