@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const bcryptjs = require('bcryptjs');
 
 const resolvers = {
   Query: {
@@ -13,6 +14,9 @@ const resolvers = {
       if (userExists) {
         throw new Error('Whoops: User already registered')
       }
+
+      const salt = await bcryptjs.genSalt(10);
+      input.password = await bcryptjs.hash(password, salt);
 
       try {
         const user = new User(input);
