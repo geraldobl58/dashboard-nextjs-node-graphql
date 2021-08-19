@@ -1,5 +1,14 @@
 const User = require('../models/User');
 const bcryptjs = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+require('dotenv').config({ path: 'variables.env' });
+
+const createToken = (user, secret, expiresIn) => {
+  const { id, email, name, nickname } = user;
+
+  return jwt.sign({ id, email, name, nickname }, secret, { expiresIn });
+}
 
 const resolvers = {
   Query: {
@@ -38,7 +47,15 @@ const resolvers = {
         throw new Error('Whoops: User does not exist')
       }
 
+      const passwordCorrectly = await bcryptjs.compare(password, userExists.password);
+    
+      if (!passwordCorrectly) {
+        throw new Error('Whoops: Incorrect login or password');
+      }
 
+      return {
+        token: createToken(userExists, process.env.SECRET, '24h')
+      }
     }
   }
 }
