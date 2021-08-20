@@ -90,6 +90,17 @@ const resolvers = {
       }catch(err) {
         console.log(err);
       }
+    },
+    updateProduct: async (_, { id, input }) => {
+        let product = await Product.findById(id);
+
+        if (!product) {
+          throw new Error('Whoops: Not found!');
+        }
+
+        product = await Product.findOneAndUpdate({ _id: id }, input, { new: true });
+      
+        return product;
     }
   }
 }
