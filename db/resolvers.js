@@ -101,6 +101,17 @@ const resolvers = {
         product = await Product.findOneAndUpdate({ _id: id }, input, { new: true });
       
         return product;
+    },
+    deleteProduct: async (_, { id }) => {
+      let product = await Product.findById(id);
+
+      if (!product) {
+        throw new Error('Whoops: Not found!');
+      }
+
+      await Product.findOneAndDelete({ _id: id });
+
+      return "Product deleted successfully!";
     }
   }
 }
