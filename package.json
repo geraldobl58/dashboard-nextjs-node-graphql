@@ -11,7 +11,7 @@
   "author": "Geraldo Luiz",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "^3.1.2",
+    "apollo-server": "^2.11.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^10.0.0",
     "graphql": "^15.5.1",

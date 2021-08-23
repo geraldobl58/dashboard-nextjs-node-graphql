@@ -179,6 +179,21 @@ const resolvers = {
       client = await Client.findOneAndUpdate({ _id, id }, input, { new: true });
 
       return client;
+    },
+    deleteClient: async (_, { id }, ctx) => {
+      let client = await Client.findById(id);
+
+      if (!client) {
+        throw new Error('Whoops: Not found!');
+      }
+
+      if (client.seller.toString() !== ctx.user.id) {
+        throw new Error('Whoops: You dont have credentials!');
+      }
+
+      await Client.findOneAndDelete({ _id: id });
+
+      return "Client deleted successfully!"
     }
   }
 }
