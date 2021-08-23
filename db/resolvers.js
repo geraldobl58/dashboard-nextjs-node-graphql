@@ -194,6 +194,20 @@ const resolvers = {
       await Client.findOneAndDelete({ _id: id });
 
       return "Client deleted successfully!"
+    },
+    newOrder: async (_, { input }, ctx) => {
+      const { client } = input;
+
+      let clientExists = await Client.findById(client);
+
+      if (!clientExists) {
+        throw new Error('Whoops: Not found!');
+      }
+
+      if (clientExists.seller.toString() !== ctx.user.id) {
+        throw new Error('Whoops: You dont have credentials!');
+      }
+
     }
   }
 }
