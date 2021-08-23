@@ -261,6 +261,45 @@ const resolvers = {
       const result = await newOrder.save();
 
       return result;
+    },
+    updateOrder: async (_, { id, input }, ctx) => {
+      const { client } = input;
+
+      const existsOrder = await Order.findById(id);
+
+      if (!existsOrder) {
+        throw new Error('Whoops: Registration does not exist!');
+      }
+
+      const existsClient = await Client.findById(client);
+
+      if (!existsClient) {
+        throw new Error('Whoops: Not found!');
+      }
+
+      if (existsClient.seller.toString() !== ctx.user.id) {
+        throw new Error('Whoops: You dont have credentials!');
+      }
+
+      if (input.order) {
+        for await (const order of input.order) {
+          const { id } = order;
+  
+          const product = await Product.findById(id);
+  
+          if (order.quantity > product.stock) {
+            throw new Error(`Whoops: ${product.name} there is no amount available!`);
+          } else {
+            product.stock = product.stock - order.quantity;
+  
+            await product.save();
+          }
+        };
+      }
+
+      const result = await Order.findOneAndUpdate({ _id: id }, input, { new: true });
+
+      return result;
     }
   }
 }
