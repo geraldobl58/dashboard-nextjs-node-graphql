@@ -113,6 +113,29 @@ const resolvers = {
       await Product.findOneAndDelete({ _id: id });
 
       return "Product deleted successfully!";
+    },
+    newClient: async (_, { input }) => {
+      const { email } = input;
+
+      const client = await Client.findOne({ email });
+
+      if (client) {
+        throw new Error('Whoops: Client already registered!');
+      }
+
+      const newClient = new Client(input);
+
+      newClient.seller = "611ead266ebc1739181c43ac"
+
+      try {
+
+        const result = await newClient.save();
+  
+        return result;
+      }catch (err) {
+        console.log(err);
+      }
+
     }
   }
 }
