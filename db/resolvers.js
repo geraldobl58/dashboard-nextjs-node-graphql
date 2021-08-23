@@ -114,7 +114,7 @@ const resolvers = {
 
       return "Product deleted successfully!";
     },
-    newClient: async (_, { input }) => {
+    newClient: async (_, { input }, ctx) => {
       const { email } = input;
 
       const client = await Client.findOne({ email });
@@ -125,7 +125,7 @@ const resolvers = {
 
       const newClient = new Client(input);
 
-      newClient.seller = "611ead266ebc1739181c43ac"
+      newClient.seller = ctx.user.id;
 
       try {
 
