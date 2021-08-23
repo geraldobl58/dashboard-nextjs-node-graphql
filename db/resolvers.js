@@ -52,6 +52,19 @@ const resolvers = {
       }catch (err) {
         console.log(err);
       }
+    },
+    getClient: async (_, { id }, ctx) => {
+      const client = await Client.findById(id);
+
+      if (!client) {
+        throw new Error('Whoops: Not found!');
+      }
+
+      if (client.seller.toString() !== ctx.user.id) {
+        throw new Error('You dont have credentials!');
+      }
+
+      return client;
     }
   },
   Mutation: {
