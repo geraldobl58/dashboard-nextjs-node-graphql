@@ -208,6 +208,15 @@ const resolvers = {
         throw new Error('Whoops: You dont have credentials!');
       }
 
+      for await (const order of input.order) {
+        const { id } = order;
+
+        const product = await Product.findById(id);
+
+        if (order.quantity > product.stock) {
+          throw new Error(`Whoops: ${product.name} there is no amount available!`);
+        }
+      };
     }
   }
 }
