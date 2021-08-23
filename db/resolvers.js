@@ -300,6 +300,21 @@ const resolvers = {
       const result = await Order.findOneAndUpdate({ _id: id }, input, { new: true });
 
       return result;
+    },
+    deleteOrder: async (_, {id}, ctx) => {
+      const order = await Order.findById(id);
+
+      if (!order) {
+        throw new Error('Whoops: Not found!');
+      }
+
+      if (order.seller.toString() !== ctx.user.id) {
+        throw new Error('Whoops: You dont have credentials!');
+      }
+
+      await Order.findOneAndDelete({ _id: id });
+
+      return "Order deleted successfully";
     }
   }
 }
