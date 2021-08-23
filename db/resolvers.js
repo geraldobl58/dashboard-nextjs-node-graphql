@@ -36,7 +36,15 @@ const resolvers = {
       }
 
       return product;
-    } 
+    },
+    getClients: async () => {
+      try {
+        const clients = await Client.find({});
+        return clients;
+      }catch (err) {
+        console.log(err);
+      }
+    }
   },
   Mutation: {
     newUser: async (_, { input }) => {
