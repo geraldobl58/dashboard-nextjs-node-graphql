@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Product = require('../models/Product');
 const Client = require('../models/Client');
+const Order = require('../models/Order');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -215,8 +216,20 @@ const resolvers = {
 
         if (order.quantity > product.stock) {
           throw new Error(`Whoops: ${product.name} there is no amount available!`);
+        } else {
+          product.stock = product.stock - order.quantity;
+
+          await product.save();
         }
       };
+
+      const newOrder = new Order(input);
+
+      newOrder.seller = ctx.user.id;
+
+      const result = await newOrder.save();
+
+      return result;
     }
   }
 }
