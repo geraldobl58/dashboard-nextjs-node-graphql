@@ -164,7 +164,21 @@ const resolvers = {
       }catch (err) {
         console.log(err);
       }
+    },
+    updateClient: async (_, { id, input }, ctx) => {
+      let client = await Client.findById(id);
 
+      if (!client) {
+        throw new Error('Whoops: Not found!');
+      }
+
+      if (client.seller.toString() !== ctx.user.id) {
+        throw new Error('Whoops: You dont have credentials!');
+      }
+
+      client = await Client.findOneAndUpdate({ _id, id }, input, { new: true });
+
+      return client;
     }
   }
 }
